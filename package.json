@@ -1,0 +1,16 @@
+{
+  "name": "css-to-js",
+  "version": "0.0.0",
+  "description": "Compiles CSS files into require-able JS files",
+  "main": "index.js",
+  "bin": "bin/css-to-js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
+  "license": "MIT",
+  "dependencies": {
+    "rework": "~0.18.3",
+    "commander": "~2.1.0"
+  }
+}

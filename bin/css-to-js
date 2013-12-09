@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var cssToJs = require('../');
+var program = require('commander');
+
+program
+  .version(require('../package').version)
+  .option('-p, --prefix [selector]')
+  .parse(process.argv);
+
+var data = '';
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', function (b) {
+  data += b;
+});
+process.stdin.on('end', function () {
+  var js = cssToJs(data, program);
+  console.log(js);
+});
