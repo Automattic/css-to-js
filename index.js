@@ -12,6 +12,10 @@ var rework = require('rework');
 
 module.exports = cssToJs;
 
+/**
+ * The client-side code CommonJS require code.
+ */
+
 var client = fs.readFileSync(__dirname + '/client.js', 'utf8');
 
 /**
