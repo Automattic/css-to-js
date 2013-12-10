@@ -22,6 +22,10 @@ function setup (doc) {
   if (!head) throw new Error('could not find <head> DOM node');
   var style = doc.createElement('style');
   style.type = 'text/css';
-  style.innerHTML = css;
+  if (style.styleSheet) {  // IE
+    style.styleSheet.cssText = css;
+  } else {                 // the world
+    style.appendChild(doc.createTextNode(css));
+  }
   head.appendChild(style);
 }
