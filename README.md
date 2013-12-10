@@ -25,6 +25,8 @@ Given the CSS file `styles.css`:
 }
 ```
 
+With `css-to-js` you can compile this into a `.js` file, with a CSS prefix of
+`.my-class-name`, like so:
 
 ``` bash
 $ css-to-js --prefix ".my-class-name"
@@ -65,6 +67,9 @@ function setup (doc) {
   head.appendChild(style);
 }
 ```
+
+Now you can `require()` this file at will via Node.js, ComponentJS, Browserify, or
+any other require build system.
 
 
 License
