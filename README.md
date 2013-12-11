@@ -2,6 +2,14 @@ css-to-js
 =========
 ### Compiles CSS files into require-able JS files
 
+The `css-to-js(1)` program accepts a CSS file via `stdin` and outputs a
+CommonJS `require()` file, which when required on the client-side, will
+inject the styles into the `<head>` of the document via a `<style>` tag.
+
+The output file depends on the [`component/load-styles`][load-styles] component,
+so be sure to add that to the `dependencies` array of your component (not
+inlining the `load-styles` logic into the output files keeps it [DRY][] and
+reduces file size).
 
 
 Installation
@@ -35,37 +43,14 @@ $ css-to-js --prefix ".my-class-name"
 Will output `.js` code similar to:
 
 ``` js
-var css = ".my-class-name .foo {\n  color: red;\n}";
-
-/**
- * Module exports.
- */
-
-module.exports = setup;
-
-/**
- * Injects the CSS into the <head> DOM node.
- */
-
-function setup (doc) {
-  // only run once per CSS file...
-  if (setup.called) return;
-  setup.called = true;
-
-  // default to the global `document` object
-  if (!doc) doc = document;
-
-  var head = doc.head || doc.getElementsByTagName('head')[0];
-  if (!head) throw new Error('could not find <head> DOM node');
-  var style = doc.createElement('style');
-  style.type = 'text/css';
-  if (style.styleSheet) {  // IE
-    style.styleSheet.cssText = css;
-  } else {                 // the world
-    style.appendChild(doc.createTextNode(css));
-  }
-  head.appendChild(style);
-}
+var css = ".my-class-name .wat {\n  color: red;\n}\n\n.my-class-name div i {\n  color: blue;\n}";
+var called = false;
+var load = require('load-styles');
+module.exports = function loadStyles(doc) {
+  if (called) return;
+  called = true;
+  return load(css, doc);
+};
 ```
 
 Now you can `require()` this file at will via Node.js, ComponentJS, Browserify, or
@@ -97,3 +82,6 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[DRY]: http://en.wikipedia.org/wiki/Don't_repeat_yourself
+[load-styles]: https://github.com/component/load-styles
